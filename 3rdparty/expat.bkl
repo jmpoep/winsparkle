@@ -6,7 +6,7 @@ msvs.generate-solution = false;
 library WinSparkle_expat : t_3rdparty {
     msvs.projectfile = ../../../expat.vcxproj;
 
-    defines += COMPILING_FOR_WINDOWS;
+    includedirs += ../../../config;
 
     headers {
         ascii.h
@@ -30,5 +30,6 @@ library WinSparkle_expat : t_3rdparty {
         xmltok.c
         xmltok_impl.c
         xmltok_ns.c
+        random_rand_s.c
     }
 }
