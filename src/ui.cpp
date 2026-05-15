@@ -482,6 +482,8 @@ private:
     bool m_errorOccurred;
     // whether window closure was updater-initiated (i.e. not caused by user)
     bool m_closeInitiatedByUpdater;
+    // whether the web browser has loaded the release notes
+    bool m_webBrowserPageLoaded;
 
     static const int RELNOTES_WIDTH = 460;
     static const int RELNOTES_HEIGHT = 200;
@@ -495,6 +497,7 @@ UpdateDialog::UpdateDialog()
     m_installAutomatically = false;
     m_errorOccurred = false;
     m_closeInitiatedByUpdater = false;
+    m_webBrowserPageLoaded = false;
 
     m_heading = new wxStaticText(this, wxID_ANY, "");
     SetHeadingFont(m_heading);
@@ -1033,17 +1036,26 @@ void UpdateDialog::ShowReleaseNotes(const Appcast& info)
         sizer->Add(m_webBrowser, wxSizerFlags(1).Expand());
         m_browserParent->SetSizer(sizer);
 
-        // Open all links in the default browser:
-		m_webBrowser->Bind(wxEVT_WEBVIEW_NAVIGATING, [info](wxWebViewEvent& evt)
+        m_webBrowser->Bind(wxEVT_WEBVIEW_LOADED, [this](wxWebViewEvent& evt)
+            {
+                this->m_webBrowserPageLoaded = true;
+            });
+
+        // Open all links in the default browser once the documented is loaded.
+        // Note that wxEVT_WEBVIEW_NAVIGATING is emitted for redirects during page loading
+        // as well, as we can only "hijack" the event once the release notes page was loaded
+        m_webBrowser->Bind(wxEVT_WEBVIEW_NAVIGATING, [this](wxWebViewEvent& evt)
 			{
-				auto url = evt.GetURL();
-                if (url.starts_with("http") && url != info.ReleaseNotesURL)
+				auto& url = evt.GetURL();
+                if (this->m_webBrowserPageLoaded && url.starts_with("http"))
                 {
                     wxLaunchDefaultBrowser(url);
                     evt.Veto();
                 }
 			});
     }
+
+    m_webBrowserPageLoaded = false;
 
     if( !info.ReleaseNotesURL.empty() )
     {
