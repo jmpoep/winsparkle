@@ -8,10 +8,10 @@ library WinSparkle_wx : t_3rdparty {
     msvs.option.Globals.WindowsTargetPlatformVersion = 10.0;
 
     defines += WXBUILDING;
-    includedirs += ../wxWidgets_setup_h include;
+    includedirs += ../config include;
 
     headers {
-        ../wxWidgets_setup_h/wx/setup.h
+        ../config/wx/setup.h
     }
 
     sources {

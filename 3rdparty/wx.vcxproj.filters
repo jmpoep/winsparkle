@@ -17,7 +17,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="wxWidgets_setup_h\wx\setup.h">
+    <ClInclude Include="config\wx\setup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wxWidgets\include\wx\webview.h">

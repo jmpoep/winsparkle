@@ -53,6 +53,7 @@ add_subdirectory(crypto)
 set(SOURCE_DIR ${ROOT_DIR}/src)
 
 include_directories(${ROOT_DIR}/include)
+include_directories(${ROOT_DIR}/3rdparty/config)
 include_directories(${EXPAT_INCLUDE_DIRS})
 include_directories(${wxWidgets_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIRS})

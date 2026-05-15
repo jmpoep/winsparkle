@@ -45,7 +45,7 @@ shared-library WinSparkle {
     includedirs += 3rdparty/openssl-win32;
     deps += WinSparkle_libcrypto;
 
-    includedirs += 3rdparty/wxWidgets_setup_h 3rdparty/wxWidgets/include;
+    includedirs += 3rdparty/config 3rdparty/wxWidgets/include;
     deps += WinSparkle_wx;
 
     includedirs += 3rdparty/ed25519/src;
