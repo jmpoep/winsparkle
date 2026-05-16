@@ -11,12 +11,12 @@ jobs:
         platform: [Win32, x64, ARM64]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: 'recursive'
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: Restore dependency packages
       run: nuget restore
@@ -25,7 +25,7 @@ jobs:
       run: msbuild -m -t:Build -p:Configuration=Release -p:Platform=${{ matrix.platform }} WinSparkle.sln
 
     - name: Archive binaries
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: winsparkle-binaries-${{ matrix.platform }}
         path: |
@@ -42,20 +42,20 @@ jobs:
     needs: build
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Fetch binaries (Win32)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-Win32
 
       - name: Fetch binaries (x64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-x64
 
       - name: Fetch binaries (ARM64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-ARM64
 
@@ -63,7 +63,7 @@ jobs:
         run: nuget pack nuget/WinSparkle.nuspec -Verbosity detailed
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-package
           path: "*.nupkg"
@@ -75,11 +75,11 @@ jobs:
     needs: build-nuget
     steps:
       - name: Fetch artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: nuget-package
 
-      - uses: nuget/setup-nuget@v1
+      - uses: nuget/setup-nuget@v4
         with:
           nuget-api-key: ${{ secrets.NUGET_API_KEY }}
           nuget-api-key-source: https://www.nuget.org/api/v2/package
@@ -94,23 +94,23 @@ jobs:
     needs: build-nuget
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: 'recursive'
           fetch-depth: 0
 
       - name: Fetch binaries (Win32)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-Win32
 
       - name: Fetch binaries (x64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-x64
 
       - name: Fetch binaries (ARM64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: winsparkle-binaries-ARM64
 
